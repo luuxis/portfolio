@@ -47,11 +47,23 @@ header p {
     font-size: 18px;
 }
 
+.projects .container {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.projects .container H2 {
+    width: 100%;
+}
+
 .project {
     background: #fff;
     margin: 20px 0;
     padding: 20px;
     border: #77ab59 1px solid;
+    width: 20%;
 }
 
 .project h3 {
