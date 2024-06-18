@@ -12,7 +12,19 @@ class GitHubProjects {
     }
 
     async loadProjects() {
-        this.projects = await this.fetchData();
+        this.projects = await this.fetchData().then(data => {
+            return data.map(project => {
+                if (project.fork) return;
+                return {
+                    name: project.name,
+                    description: project.description,
+                    language: project.language,
+                    created_at: project.created_at,
+                    updated_at: project.updated_at,
+                    html_url: project.html_url
+                };
+            });
+        });
         this.sortProjects();
     }
 
