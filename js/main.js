@@ -12,11 +12,11 @@ class GitHubProjects {
     }
 
     async fetchReadme(repo) {
-        const response = await fetch(`https://api.github.com/repos/${this.user}/${repo}/readme`);
+        let response = await fetch(`https://api.github.com/repos/${this.user}/${repo}/readme`);
         if (!response.ok) return false;
-        const data = await response.json();
-        const readmeContent = atob(data.content);
-        return readmeContent;
+        response = await response.json();
+        const readmeContent = await fetch(response.download_url);
+        return await readmeContent.text();
     }
 
     async loadProjects() {
