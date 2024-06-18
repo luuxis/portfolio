@@ -11,6 +11,14 @@ class GitHubProjects {
         return data;
     }
 
+    async fetchReadme(repo) {
+        const response = await fetch(`https://api.github.com/repos/${this.user}/${repo}/readme`);
+        if (!response.ok) return false;
+        const data = await response.json();
+        const readmeContent = atob(data.content);
+        return readmeContent;
+    }
+
     async loadProjects() {
         this.projects = await this.fetchData().then(data => {
             return data.filter(project => !project.fork);
@@ -27,6 +35,23 @@ class GitHubProjects {
     }
 }
 
+function openModal(readmeContent) {
+    document.querySelector('.modal-readme').innerHTML = readmeContent;
+
+    const modal = document.querySelector('.modal');
+    modal.style.display = 'block';
+
+    document.querySelector('.close-button').onclick = () => {
+        modal.style.display = 'none';
+    };
+
+    window.onclick = (event) => {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    };
+}
+
 (async () => {
     const gitHubProjects = new GitHubProjects('luuxis');
     await gitHubProjects.loadProjects();
@@ -38,10 +63,20 @@ class GitHubProjects {
             <p>${project.description || 'No description'}</p>
             <p>Language: ${project.language}</p>
             <p>Created at: ${new Date(project.created_at).toLocaleDateString()}</p>
-            <div class="view-details">View details</div>
+            <a href="#" class="view-details" data-project='${JSON.stringify(project)}'>View details</a>
         `;
 
         projectElement.classList.add('project');
         document.querySelector('.projects .container').appendChild(projectElement);
+
+        projectElement.querySelector('.view-details').onclick = async (event) => {
+            event.preventDefault();
+            const readmeContent = await gitHubProjects.fetchReadme(project.name);
+            if (!readmeContent) {
+                openModal('No README file found.');
+                return;
+            }
+            openModal(marked.parse(readmeContent));
+        };
     }
 })();
