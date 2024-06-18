@@ -34,15 +34,14 @@ class GitHubProjects {
     for (const project of gitHubProjects.getProjects()) {
         const projectElement = document.createElement('div');
         projectElement.innerHTML = `
-            <h3>${project.name}</h2>
+            <h3>${project.name}</h3>
             <p>${project.description || 'No description'}</p>
             <p>Language: ${project.language}</p>
-            <p>created at: ${new Date(project.created_at).toLocaleDateString()}</p>
-            <a href="${project.html_url}" target="_blank">View on GitHub</a>
+            <p>Created at: ${new Date(project.created_at).toLocaleDateString()}</p>
+            <div class="view-details">View details</div>
         `;
 
         projectElement.classList.add('project');
-
-        document.querySelector('.projects .container ').appendChild(projectElement);
+        document.querySelector('.projects .container').appendChild(projectElement);
     }
 })();
