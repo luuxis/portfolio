@@ -40,14 +40,17 @@ function openModal(readmeContent) {
 
     const modal = document.querySelector('.modal');
     modal.style.display = 'block';
+    document.body.style.overflow = 'hidden';
 
     document.querySelector('.close-button').onclick = () => {
         modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
     };
 
     window.onclick = (event) => {
         if (event.target === modal) {
             modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
         }
     };
 }
